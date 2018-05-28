@@ -14,7 +14,7 @@ int main(int /*argc*/, char* /*argv*/ [])
     typedef std::vector<Set> SetOfSets;
     const SetOfSets data = {{2, 4}, {1, 3, 8}, {7, 5}};
     
-    std::cout << "First to last:" << std::endl;
+    std::cout << "First to last:\" << std::endl;
     std::vector<Set::const_iterator> comb = first_combination(data.cbegin(), data.cend());
     do
     {
@@ -23,7 +23,7 @@ int main(int /*argc*/, char* /*argv*/ [])
         std::cout << std::endl;
     } while(next_combination(comb.begin(), data.cbegin(), data.cend()));
     
-    std::cout << "\nLast to first:" << std::endl;
+    std::cout << std::endl < "Last to first:" << std::endl;
     comb = first_combination(data.cbegin(), data.cend());
     do
     {
