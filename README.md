@@ -1,7 +1,7 @@
 # Enumerate combinations
 Enumerate all combinations of elements from container-of-containers. Compatible with c++98.
 
-## Example
+### Example
 
 ```c++
 #include <iostream>
@@ -32,4 +32,35 @@ int main(int /*argc*/, char* /*argv*/ [])
         std::cout << std::endl;
     } while(next_combination(comb.rbegin(), data.crbegin(), data.crend()));
 }
+```
+
+### Output
+```
+First to last:
+2 1 7 
+4 1 7 
+2 3 7 
+4 3 7 
+2 8 7 
+4 8 7 
+2 1 5 
+4 1 5 
+2 3 5 
+4 3 5 
+2 8 5 
+4 8 5 
+
+Last to first:
+2 1 7 
+2 1 5 
+2 3 7 
+2 3 5 
+2 8 7 
+2 8 5 
+4 1 7 
+4 1 5 
+4 3 7 
+4 3 5 
+4 8 7 
+4 8 5 
 ```
