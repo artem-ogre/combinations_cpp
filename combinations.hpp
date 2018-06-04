@@ -8,12 +8,12 @@
 
 // Precondition: all sets between iterators should be non-empty:
 // contain at least 1 element
-template <typename SetOfSetsIter>
+template <typename SetsIter>
 class combinations
 {
 public:
-    typedef combinations<SetOfSetsIter> Combinations_type;
-    typedef typename std::iterator_traits<SetOfSetsIter>::value_type Set;
+    typedef combinations<SetsIter> Combinations_type;
+    typedef typename std::iterator_traits<SetsIter>::value_type Set;
     typedef typename std::vector<typename Set::const_iterator> Combination;
 
     typedef Combination value_type;
@@ -35,26 +35,23 @@ public:
             , last_(other.last_)
             , combination_(other.combination_)
         {}
-        const_iterator(
-            SetOfSetsIter first,
-            SetOfSetsIter last,
-            Combination combination)
+        const_iterator(SetsIter first, SetsIter last, Combination combination)
             : first_(first)
             , last_(last)
             , combination_(combination)
         {}
         static const_iterator
-        make_begin(const SetOfSetsIter first, const SetOfSetsIter last)
+        make_begin(const SetsIter first, const SetsIter last)
         {
             Combination combination;
-            for(SetOfSetsIter it = first; it != last; ++it)
+            for(SetsIter it = first; it != last; ++it)
                 combination.push_back(it->begin());
             return const_iterator(first, last, combination);
         }
         static const_iterator
-        make_end(const SetOfSetsIter first, const SetOfSetsIter last)
+        make_end(const SetsIter first, const SetsIter last)
         {
-            SetOfSetsIter it = first;
+            SetsIter it = first;
             Combination combination(1, it->end());
             for(++it; it != last; ++it)
                 combination.push_back(--it->end());
@@ -78,7 +75,7 @@ public:
         const_iterator& operator++()
         {
             typename Combination::iterator combIt = combination_.begin();
-            for(SetOfSetsIter it = first_; it != last_; ++it, ++combIt)
+            for(SetsIter it = first_; it != last_; ++it, ++combIt)
             {
                 if(++(*combIt) != it->end())
                     return *this;
@@ -90,7 +87,7 @@ public:
         const_iterator& operator--()
         {
             typename Combination::iterator combIt = combination_.begin();
-            for(SetOfSetsIter it = first_; it != last_; ++it, ++combIt)
+            for(SetsIter it = first_; it != last_; ++it, ++combIt)
             {
                 if(*combIt != it->begin())
                 {
@@ -118,7 +115,7 @@ public:
         void set_to_end_()
         {
             typename Combination::iterator combIt = combination_.begin();
-            SetOfSetsIter it = first_;
+            SetsIter it = first_;
             *(combIt++) = (it++)->end();
             for(; it != last_; ++it, ++combIt)
                 *combIt = --it->end();
@@ -126,39 +123,39 @@ public:
         void set_to_begin_()
         {
             typename Combination::iterator combIt = combination_.begin();
-            for(SetOfSetsIter it = first_; it != last_; ++it, ++combIt)
+            for(SetsIter it = first_; it != last_; ++it, ++combIt)
                 *combIt = it->begin();
         }
-        friend class combinations<SetOfSetsIter>;
+        friend class combinations<SetsIter>;
 
     private:
-        SetOfSetsIter first_;
-        SetOfSetsIter last_;
+        SetsIter first_;
+        SetsIter last_;
         Combination combination_;
     };
 
     typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
     combinations() {}
-    combinations(SetOfSetsIter first, SetOfSetsIter last)
+    combinations(SetsIter first, SetsIter last)
         : first_(first)
         , last_(last)
     {}
-    combinations(const combinations<SetOfSetsIter>& other)
+    combinations(const combinations<SetsIter>& other)
         : first_(other.first_)
         , last_(other.last_)
     {}
     ~combinations() {}
-    combinations& operator=(const combinations<SetOfSetsIter>& other)
+    combinations& operator=(const combinations<SetsIter>& other)
     {
         swap(*this, other);
         return *this;
     }
-    bool operator==(const combinations<SetOfSetsIter>& other) const
+    bool operator==(const combinations<SetsIter>& other) const
     {
         return first_ == other.first_ && last_ == other.last_;
     }
-    bool operator!=(const combinations<SetOfSetsIter>& other) const
+    bool operator!=(const combinations<SetsIter>& other) const
     {
         return !(*this == other);
     }
@@ -183,13 +180,13 @@ public:
     }
     const_reverse_iterator rend() const { return crend(); }
     friend void swap(
-        combinations<SetOfSetsIter>& first,
-        combinations<SetOfSetsIter>& second) // nothrow
+        combinations<SetsIter>& first,
+        combinations<SetsIter>& second) // nothrow
     {
         std::swap(first.first_, second.first_);
         std::swap(first.last_, second.last_);
     }
-    void swap(combinations<SetOfSetsIter> other) { swap(*this, other); }
+    void swap(combinations<SetsIter> other) { swap(*this, other); }
     size_type size() const
     {
         return std::accumulate(first_, last_, 1, std::multiplies<size_type>());
@@ -198,15 +195,14 @@ public:
     bool empty() const { return first_ == last_; }
 
 private:
-    SetOfSetsIter first_;
-    SetOfSetsIter last_;
+    SetsIter first_;
+    SetsIter last_;
 };
 
-template <typename SetOfSets>
-combinations<typename SetOfSets::const_iterator>
-make_combinations(const SetOfSets& data)
+template <typename Sets>
+combinations<typename Sets::const_iterator> make_combinations(const Sets& data)
 {
-    return combinations<typename SetOfSets::const_iterator>(
+    return combinations<typename Sets::const_iterator>(
         data.cbegin(), data.cend());
 }
 
