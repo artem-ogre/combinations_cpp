@@ -9,6 +9,94 @@ Some implementation details:
 - c++98 compatible
 
 
+### Table of Contents  
+- [Synopsis](#synopsis)  
+- [Example](#example)  
+- [Example output](#example-output)  
+
+
+### Synopsis
+```c++
+template <typename SetOfSetsIter>
+class combinations
+{
+public:
+    typedef combinations<SetOfSetsIter> Combinations_type;
+    typedef typename std::iterator_traits<SetOfSetsIter>::value_type Set;
+    typedef typename std::vector<typename Set::const_iterator> Combination;
+
+    typedef Combination value_type;
+    typedef long long difference_type;
+    typedef size_t size_type;
+
+    class const_iterator
+    {
+    public:
+        typedef std::bidirectional_iterator_tag iterator_category;
+        typedef typename Combinations_type::difference_type difference_type;
+        typedef typename Combinations_type::value_type value_type;
+        typedef const Combination reference;
+        typedef const Combination pointer;
+
+        const_iterator() {}
+        const_iterator(const const_iterator& other);
+        const_iterator(SetOfSetsIter first, SetOfSetsIter last, Combination combination);
+        static const_iterator make_begin(const SetOfSetsIter first, const SetOfSetsIter last);
+        static const_iterator make_end(const SetOfSetsIter first, const SetOfSetsIter last);
+        ~const_iterator() {}
+        const_iterator& operator=(const const_iterator other);
+        bool operator==(const const_iterator& other) const;
+        bool operator!=(const const_iterator& other) const;
+        const_iterator& operator++();
+        const_iterator& operator--();
+        Combination operator*() const;
+        Combination operator->() const;
+        friend void swap(const_iterator& first, const_iterator& second);
+        void swap(Combinations_type other);
+
+    private:
+        void set_to_end_();
+        void set_to_begin_();
+        friend class combinations<SetOfSetsIter>;
+
+    private:
+        SetOfSetsIter first_;
+        SetOfSetsIter last_;
+        Combination combination_;
+    };
+
+    typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
+
+    combinations();
+    combinations(SetOfSetsIter first, SetOfSetsIter last);
+    combinations(const combinations<SetOfSetsIter>& other);
+    ~combinations();
+    combinations& operator=(const combinations<SetOfSetsIter>& other);
+    bool operator==(const combinations<SetOfSetsIter>& other) const;
+    bool operator!=(const combinations<SetOfSetsIter>& other) const;
+    const_iterator cbegin() const;
+    const_iterator begin() const;
+    const_iterator cend() const;
+    const_iterator end() const;
+    const_reverse_iterator crbegin() const;
+    const_reverse_iterator rbegin() const;
+    const_reverse_iterator crend() const;
+    const_reverse_iterator rend() const;
+    friend void swap(combinations<SetOfSetsIter>& first, combinations<SetOfSetsIter>& second);
+    void swap(combinations<SetOfSetsIter> other);
+    size_type size() const;
+    size_type max_size() const;
+    bool empty() const;
+
+private:
+    SetOfSetsIter first_;
+    SetOfSetsIter last_;
+};
+
+template <typename SetOfSets>
+combinations<typename SetOfSets::const_iterator> make_combinations(const SetOfSets& data);
+```
+
 ### Example
 
 ```c++
@@ -83,7 +171,7 @@ int main()
 }
 ```
 
-### Output
+### Example output
 ```
 First to last-------
 Forward:
