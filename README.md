@@ -55,16 +55,6 @@ public:
         Combination operator->() const;
         friend void swap(const_iterator& first, const_iterator& second);
         void swap(Combinations_type other);
-
-    private:
-        void set_to_end_();
-        void set_to_begin_();
-        friend class combinations<SetsIter>;
-
-    private:
-        SetsIter first_;
-        SetsIter last_;
-        Combination combination_;
     };
 
     typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
@@ -89,10 +79,6 @@ public:
     size_type size() const;
     size_type max_size() const;
     bool empty() const;
-
-private:
-    SetsIter first_;
-    SetsIter last_;
 };
 
 template <typename Sets>
