@@ -189,10 +189,16 @@ public:
     void swap(combinations<SetsIter> other) { swap(*this, other); }
     size_type size() const
     {
-        return std::accumulate(first_, last_, 1, std::multiplies<size_type>());
+        return std::accumulate(first_, last_, 1, mult_by_set_size_);
     }
     size_type max_size() const { return std::numeric_limits<size_type>::max(); }
     bool empty() const { return first_ == last_; }
+    
+private:
+    static size_type mult_by_set_size_(const size_type prev_sz, const Set& set)
+    {
+        return prev_sz * set.size();
+    }
 
 private:
     SetsIter first_;
